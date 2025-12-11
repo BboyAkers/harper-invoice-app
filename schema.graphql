@@ -1,0 +1,43 @@
+type InvoiceItem @table @export {
+  id: ID @primaryKey
+  itemName: String
+  description: String
+  quantity: Int
+  price: Float
+  total: Float
+}
+
+type BillingInfo @table @export {
+  id: ID @primaryKey
+  companyName: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  zipCode: String
+  country: String
+  phoneNumber: String
+  email: String
+}
+
+type Invoice @table @export {
+  id: ID @primaryKey
+  dueDate: String
+  sentDate: String
+  customerName: String
+  companyName: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  zipCode: String
+  country: String
+  phoneNumber: String
+  email: String
+  items: [InvoiceItem] @relationship(link: INLINE)
+  subtotal: Float
+  tax: Float
+  total: Float
+  dueDate: String
+  status: String
+}
