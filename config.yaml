@@ -6,3 +6,6 @@ jsResource:
   files: resources.js
 static:
   files: 'dist/'
+ 
+'@harperfast/vite-plugin':
+  package: '@harperfast/vite-plugin'

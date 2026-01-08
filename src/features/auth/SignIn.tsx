@@ -3,16 +3,16 @@ export function SignIn() {
       <div className="flex flex-col justify-center min-h-full px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
-            alt="Your Company"
-            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-            className="w-auto h-10 mx-auto"
+            alt="Harper Dog Logo"
+            src="/src/assets/HDBDogOnly.svg"
+            className="w-auto h-20 mx-auto"
           />
-          <h2 className="mt-10 font-bold tracking-tight text-center text-2xl/9">
+          <h2 className="mt-8 font-bold tracking-tight text-center text-2xl/9">
             Sign in to your account
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
           <form action="#" method="POST" className="space-y-6">
             <div>
               <label htmlFor="email" className="block font-medium text-sm/6">
@@ -63,10 +63,10 @@ export function SignIn() {
             </div>
           </form>
 
-          <p className="mt-10 text-centertext-sm/6">
+          <p className="mt-2 text-center text-sm/6">
             Not a member?{' '}
             <a href="#" className="font-semibold hover:text-indigo-500">
-              Start a 14 day free trial
+              Sign up!
             </a>
           </p>
         </div>

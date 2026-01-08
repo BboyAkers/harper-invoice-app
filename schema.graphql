@@ -34,7 +34,7 @@ type Invoice @table @export {
   country: String
   phoneNumber: String
   email: String
-  items: [InvoiceItem] @relationship(link: INLINE)
+  # items: [InvoiceItem] @relationship(link: INLINE) # FIXME: The relationship directive on "items" in table "Invoice" must use either "from" or "to" arguments
   subtotal: Float
   tax: Float
   total: Float
