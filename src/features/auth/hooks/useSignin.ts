@@ -7,17 +7,17 @@ export interface UserCredentials {
 
 export async function onSignInSubmit(signInCredentials: UserCredentials) {
   try {
-	const response = await fetch('http://localhost:9925/', {
+	const response = await fetch('/Login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      operation: 'login',
       ...signInCredentials,
     }),
     
   });
+    console.log('Sign in response:', response);
     return response;
   } 
   catch (error) {
