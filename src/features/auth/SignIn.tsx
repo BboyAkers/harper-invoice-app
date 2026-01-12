@@ -17,7 +17,7 @@ export function SignIn() {
         {
           onSuccess: () => {
             form.reset();
-            console.log('User signed up successfully');
+            // console.log('User signed up successfully');
           }
         }
       );

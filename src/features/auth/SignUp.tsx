@@ -3,30 +3,40 @@ import { Input } from "@/components/ui/input";
 import { Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useSignUpMutation, type UserCredentials } from "@/features/auth/hooks/useSignUp";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 interface SignUpCredentials extends UserCredentials {
   confirmPassword: string;
 }
+const SignUpSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+  confirmPassword: z.string().min(6, "Please confirm your password"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+});
 
 export function SignUp() {
 
-  const form = useForm<SignUpCredentials>();
+  const form = useForm<SignUpCredentials>({
+    resolver: zodResolver(SignUpSchema)
+  });
 
   const { mutate: signUpUser, isPending: isSignUpPending } = useSignUpMutation();
 
   const onSignUpFormSubmit = (formData: SignUpCredentials) => {
-    if (formData) {
-      signUpUser({
-        ...formData
-      },
-        {
-          onSuccess: () => {
-            form.reset();
-            console.log('User signed up successfully');
-          }
+    const { username, password } = formData;
+    signUpUser({
+      username,
+      password,
+    },
+      {
+        onSuccess: () => {
+          form.reset();
         }
-      );
-    }
+      }
+    );
   };
 
   return (
@@ -56,7 +66,7 @@ export function SignUp() {
                       <Input placeholder="username" {...field} className="text-black bg-white" />
                     </FormControl>
                     <FormDescription className="text-white">
-                      This is your public display name.
+                      This is your account name.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

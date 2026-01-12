@@ -2,6 +2,7 @@ type User @table @export {
   id: ID @primaryKey
   username: String @indexed
   password: String
+  createdAt: String
   invoices: [Invoice] @relationship(to: userId)
   billingInfo: [BillingInfo] @relationship(to: userId)
 }
