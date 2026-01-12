@@ -1,75 +1,102 @@
-export function SignIn() {
-  return (
-      <div className="flex flex-col justify-center min-h-full px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            alt="Harper Dog Logo"
-            src="/src/assets/HDBDogOnly.svg"
-            className="w-auto h-20 mx-auto"
-          />
-          <h2 className="mt-8 font-bold tracking-tight text-center text-2xl/9">
-            Sign in to your account
-          </h2>
-        </div>
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Link } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
+import { useSignInMutation, type UserCredentials } from "@/features/auth/hooks/useSignin";
 
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
+export function SignIn() {
+  const form = useForm<UserCredentials>();
+
+  const { mutate: signInUser, isPending: isSignInPending } = useSignInMutation();
+
+  const onSignInFormSubmit = (formData: UserCredentials) => {
+    if (formData) {
+      signInUser({
+        ...formData
+      },
+        {
+          onSuccess: () => {
+            form.reset();
+            console.log('User signed up successfully');
+          }
+        }
+      );
+    }
+  };
+
+  return (
+    <div className="flex flex-col justify-center min-h-full p-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <img
+          alt="Harper Dog Logo"
+          src="/src/assets/HDBDogOnly.svg"
+          className="w-auto h-20 mx-auto"
+        />
+        <h2 className="mt-8 font-bold tracking-tight text-center text-2xl/9">
+          Sign in to your account
+        </h2>
+      </div>
+
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSignInFormSubmit)} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block font-medium text-sm/6">
-                Email address
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  autoComplete="email"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base  outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
-              </div>
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input placeholder="username" {...field} className="text-black bg-white" />
+                    </FormControl>
+                    <FormDescription className="text-white">
+                      This is your public display name.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block font-medium text-sm/6">
-                  Password
-                </label>
-                <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                    Forgot password?
-                  </a>
-                </div>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  autoComplete="current-password"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base  outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
-              </div>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input placeholder="password" {...field} type="password" className="text-black bg-white" />
+                    </FormControl>
+                    <FormDescription className="text-white">
+                      Please enter your password.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             <div>
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                disabled={isSignInPending}
               >
                 Sign in
               </button>
             </div>
           </form>
+        </Form>
 
-          <p className="mt-2 text-center text-sm/6">
-            Not a member?{' '}
-            <a href="#" className="font-semibold hover:text-indigo-500">
-              Sign up!
-            </a>
-          </p>
-        </div>
+        <p className="mt-2 text-center text-sm/6">
+          Not a member?{' '}
+          <Link to="/signup" className="font-semibold hover:text-indigo-500">
+            Sign up!
+          </Link>
+        </p>
       </div>
+    </div>
   )
 }
