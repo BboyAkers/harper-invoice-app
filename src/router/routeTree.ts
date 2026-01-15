@@ -19,9 +19,9 @@ export const routeTree = rootRoute.addChildren([
   dashboardLayoutRoute.addChildren([
     invoicesLayoutRoute.addChildren([
       ...invoicesRoutes,
-      invoiceDetailsLayoutRoute.addChildren([
-        ...invoiceDetailsRoutes
-      ])
+    ]),
+    invoiceDetailsLayoutRoute.addChildren([
+      ...invoiceDetailsRoutes
     ])
   ])
 ]);

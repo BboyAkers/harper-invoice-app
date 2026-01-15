@@ -1,13 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,700&display=swap");
 
-/* @font-face {
-	font-family: RadioGroteskBold;
-	font-style: bold;
-	font-weight: 700;
-	font-display: swap;
-	src: url("@/assets/fonts/PPRadioGrotesk-Bold.woff") format("woff");
-} */
-
 @import "tailwindcss";
 
 @plugin "tailwindcss-animate";
@@ -15,46 +7,79 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-	--white: hsl(0, 0%, 99.61%); /* #fefefe */
-	--black: hsl(0, 0%, 12.94%); /* #212121 */
-	/* --black-light: hsl(0, 0%, 12%); #ffffff */
-	--black-dark: hsl(0, 0%, 6.67%); /* #111111 */
-	--black-dark-gradient: 90deg, var(--black-dark) 100%, var(--black-dark) 100%; /* Faux gradient to get around how linear-gradient overrides background color works */
+	--white: hsl(0, 0%, 99.61%);
+	/* #fefefe */
+	--white-100: hsl(240, 27%, 98%);
+	/* #F8F8FB */
+	--black: hsl(228, 29%, 7%);
+	/* #0C0E16 */
+	--black-100: hsl(233, 30%, 11%);
+	/* #141625 */
+	--black-200: hsl(0, 0%, 6.67%);
+	/* #111111 */
+	--black-dark-gradient: 90deg, var(--black-dark) 100%, var(--black-dark) 100%;
+	/* Faux gradient to get around how linear-gradient overrides background color works */
 
-	--grey: hsl(0, 0%, 60.39%); /* #9a9a9a */
-	--grey-100: hsl(0, 0%, 93.73%); /* #efefef */
-	--grey-200: hsl(0, 0%, 92.94%); /* #ededed */
-	--grey-300: hsl(0, 0%, 86.67%); /* #dddddd */
-	--grey-400: hsl(0, 0%, 41.18%); /* #696969 */
-	--grey-500: hsl(0, 0%, 33.33%); /* #555555 */
-	--grey-600: hsl(0, 0%, 13.73%); /* #232323 */
-	--grey-700: hsl(202.5, 6.67%, 23.53%); /* #383D40 */
+	--grey: hsl(231, 20%, 61%);
+	/* #888EB0 */
+	--grey-100: hsl(231, 37%, 63%);
+	/* #7E88C3 */
+	--grey-200: hsl(0, 0%, 92.94%);
+	/* #ededed */
+	--grey-300: hsl(0, 0%, 86.67%);
+	/* #dddddd */
+	--grey-400: hsl(0, 0%, 41.18%);
+	/* #696969 */
+	--grey-500: hsl(0, 0%, 33.33%);
+	/* #555555 */
+	--grey-600: hsl(0, 0%, 13.73%);
+	/* #232323 */
+	--grey-700: hsl(202.5, 6.67%, 23.53%);
+	/* #383D40 */
 
-	--red: hsl(336.84, 79%, 60.78%); /* #ea4c89 */
-	--green: hsl(151.07, 49.12%, 55.29%); /* #55c58f */
-	--yellow: hsl(38.82, 100%, 50%); /* #ffa500 */
-	--pink: hsl(288.11, 100%, 58.43%); /* #d52bff */
+	--red: hsl(0, 80%, 63%);
+	/* #EC5757 */
+	--red-100: hsl(0, 100%, 80%);
+	/* #FF9797 */
+	--green: hsl(151.07, 49.12%, 55.29%);
+	/* #55c58f */
+	--yellow: hsl(38.82, 100%, 50%);
+	/* #ffa500 */
+	--pink: hsl(288.11, 100%, 58.43%);
+	/* #d52bff */
 
-	--blue: hsl(232.92, 80.9%, 60.98%); /* #4b5eec */
-	--blue-100: hsl(194.63, 98.09%, 59.02%); /* #30cbfd */
-	--blue-200: hsl(240, 100%, 88.43%); /* #c4c4ff */
-	--blue-300: hsl(241.05, 100%, 77.65%); /* #8f8dff */
-	--blue-400: hsl(253.93, 100%, 41.37%); /* #3100d3 */
+	--blue: hsl(233, 31%, 17%);
+	/* #1E2139 */
+	--blue-100: hsl(233, 30%, 21%);
+	/* #252945 */
+	--blue-200: hsl(231, 73%, 93%);
+	/* #DFE3FA */
+	--blue-300: hsl(241.05, 100%, 77.65%);
+	/* #8f8dff */
+	--blue-400: hsl(253.93, 100%, 41.37%);
+	/* #3100d3 */
 	--blue-gradient: 90deg, var(--blue-100) 0%, var(--blue) 100%;
 
 	/* --purple: hsl(243.8, 40.1%, 38.63%); #403b8a  OG purple refactor to new purple variable below */
 	/* --purple-dark-faded: hsl(255deg 27% 32%); #2800a1 */
 
-	--purple: hsl(289.87, 39.9%, 37.84%); /* #7a3a87 */
-	--purple-100: hsl(288.78, 100%, 27.25%); /* #71008B */
-	--purple-200: hsl(273.91, 100%, 31.57%); /* #5B00A1 */
-	--purple-300: hsl(243.8, 40.1%, 38.63%); /* #403b8a */
-	--purple-400: hsl(255deg 27% 32%); /* #473c68 */
-	--purple-500: hsl(254.69, 39.84%, 24.12%); /* #312556 */
+	--purple: hsl(252, 94%, 67%);
+	/* #7C5DFA */
+	--purple-100: hsl(252, 100%, 73%);
+	/* #9277FF */
+	--purple-200: hsl(273.91, 100%, 31.57%);
+	/* #5B00A1 */
+	--purple-300: hsl(243.8, 40.1%, 38.63%);
+	/* #403b8a */
+	--purple-400: hsl(255deg 27% 32%);
+	/* #473c68 */
+	--purple-500: hsl(254.69, 39.84%, 24.12%);
+	/* #312556 */
 	--purple-gradient: 90deg, var(--purple-500) 100%, var(--purple-500) 100%;
 	--purple-dark-to-light-gradient: 45deg, var(--purple-200) 0%, var(--purple-100) 100%;
 
-	--background: oklch(1 0 0); /* Dark Purple: #312556 */
+	--background: oklch(1 0 0);
+	/* Dark Purple: #312556 */
 	--foreground: oklch(0.145 0 0);
 	--card: oklch(1 0 0);
 	--card-foreground: oklch(0.145 0 0);
@@ -62,12 +87,14 @@
 	--popover: oklch(1 0 0);
 	/* --popover-foreground: hsl(0 0% 3.9%); */
 	--popover-foreground: oklch(0.145 0 0);
-	--primary: oklch(0.205 0 0); /* Purple #403b8a */
+	--primary: oklch(0.205 0 0);
+	/* Purple #403b8a */
 	--primary-foreground: oklch(0.985 0 0);
 	--secondary: oklch(0.97 0 0);
 	--secondary-foreground: oklch(0.205 0 0);
 	--muted: oklch(0.97 0 0);
-	--muted-foreground: oklch(0.556 0 0); /* #D9D9D9 */
+	--muted-foreground: oklch(0.556 0 0);
+	/* #D9D9D9 */
 	--accent: oklch(0.97 0 0);
 	--accent-foreground: oklch(0.205 0 0);
 	--destructive: oklch(0.577 0.245 27.325);
@@ -94,7 +121,8 @@
 }
 
 .dark {
-	--background: oklch(0.145 0 0); /* Dark Black: #111111 */
+	--background: oklch(0.145 0 0);
+	/* Dark Black: #111111 */
 	--foreground: oklch(0.985 0 0);
 	--card: oklch(0.205 0 0);
 	--card-foreground: oklch(0.985 0 0);
@@ -162,10 +190,14 @@
 	--radius-xl: calc(var(--radius) + 4px);
 
 	--color-white: var(--white);
+	--color-white-100: var(--white-100);
 	--color-black: var(--black);
+	--color-black-100: var(--black-100);
+	--color-black-200: var(--black-200);
 	/* --color-black-light: var(--black-light); */
 	--color-black-dark: var(--black-dark);
-	--color-black-dark-gradient: var(--black-dark-gradient); /* Faux gradient to get around how linear-gradient overrides background color works */
+	--color-black-dark-gradient: var(--black-dark-gradient);
+	/* Faux gradient to get around how linear-gradient overrides background color works */
 	--color-grey: var(--grey);
 	--color-grey-100: var(--grey-100);
 	--color-grey-200: var(--grey-200);
@@ -215,6 +247,7 @@
 }
 
 @layer base {
+
 	button:not([disabled]),
 	[role="button"]:not([disabled]),
 	input[type="checkbox"],
@@ -242,18 +275,23 @@
 	0% {
 		transform: rotate(0deg) translateY(0) scale(1);
 	}
+
 	20% {
 		transform: rotate(-12deg) translateY(-3px) scale(1.06);
 	}
+
 	40% {
 		transform: rotate(6deg) translateY(0) scale(1);
 	}
+
 	60% {
 		transform: rotate(12deg) translateY(-3px) scale(1.06);
 	}
+
 	80% {
 		transform: rotate(-6deg) translateY(0) scale(1);
 	}
+
 	100% {
 		transform: rotate(0deg) translateY(0) scale(1);
 	}
@@ -261,9 +299,12 @@
 
 /* Glowing, pulsing attention animation (apply with class `animate-glow-pulse`) */
 @keyframes glow-pulse {
-	0%, 100% {
+
+	0%,
+	100% {
 		box-shadow: 0 0 20px hsl(289.87, 39.9%, 37.84%, 50%);
 	}
+
 	50% {
 		box-shadow: 0 0 32px hsl(289.87, 39.9%, 37.84%, 100%);
 	}
@@ -288,10 +329,11 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+	* {
+		@apply border-border outline-ring/50;
 	}
-  body {
-    @apply bg-background text-foreground;
+
+	body {
+		@apply bg-background text-foreground;
 	}
 }

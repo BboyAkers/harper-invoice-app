@@ -3,7 +3,7 @@ rest:
 graphqlSchema:
   files: schema.graphql
 jsResource:
-  files: resources.js
+  files: resources.ts
 static:
   files: 'dist/'
  

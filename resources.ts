@@ -1,7 +1,14 @@
+import { Resource, tables, server, logger } from 'harperdb';
+
+interface UserData {
+  username: string;
+  password: string;
+}
+
 export class SignIn extends Resource {
   static loadAsInstance = false; // enable the updated API
 
-  async post(target, data) {
+  async post(target, data: UserData) {
     logger.notify('User login attempt', data);
     const context = this.getContext();
 
@@ -14,16 +21,12 @@ export class SignIn extends Resource {
       throw new Error('Login failed');
     }
   }
-
-  get() {
-    return 'hello from login resource';
-  }
 }
 
 export class SignUp extends Resource {
   static loadAsInstance = false; // enable the updated API
 
-  async post(target, data) {
+  async post(target, data: UserData) {
     logger.notify('User sign-up attempt', data.username);
     const context = this.getContext();
 
@@ -34,12 +37,11 @@ export class SignUp extends Resource {
       throw new Error('Sign-up failed');
     }
   }
-
 }
 
 
 // Auth Helper functions
-async function createUser(userId, userData, context) {
+async function createUser(userId: string, userData: { username: string; password: string }, context: any) {
   const { username, password } = userData;
 
   logger.debug('Creating new user', { userId, username });
@@ -51,10 +53,11 @@ async function createUser(userId, userData, context) {
     password,
     role: 'least_privileged',
     active: true,
-  });
+  }, context);
 
   // Create user record
-  const user = await User.create(
+  //NOTE: "tables"  is a global variable provided by HarperDB. We should look into better ways to handle this in the future and create types
+  const user = await tables.User.create(
     {
       id: userId,
       username,
