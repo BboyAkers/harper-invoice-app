@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react";
 import { NewInvoiceModal } from "./components/NewInvoiceModal";
 
 export function InvoicesIndex() {
+  const { data: invoices } = useGetInvoicesQuery('austin');
   return (
     <div>
       <div className="flex justify-between">
