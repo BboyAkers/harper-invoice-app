@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronRight, PlusCircleIcon } from "lucide-react";
+import { ChevronRight } from "lucide-react";
+import { NewInvoiceModal } from "./components/NewInvoiceModal";
 
-export function InvoicesIndex () {
+export function InvoicesIndex() {
   return (
     <div>
       <div className="flex justify-between">
@@ -12,18 +12,18 @@ export function InvoicesIndex () {
         </div>
         <div className="flex flex-col md:flex-row gap-2 items-center">
           <Select>
-          <SelectTrigger className="min-w-24">
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="paid">Paid</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="draft">Draft</SelectItem>
-            <SelectItem value="overdue">Overdue</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button size="lg" className="font-semibold rounded-full h-12"><PlusCircleIcon size={40} className="mr-2" />New Invoice</Button>
-      </div>
+            <SelectTrigger className="min-w-24">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="paid">Paid</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="draft">Draft</SelectItem>
+              <SelectItem value="overdue">Overdue</SelectItem>
+            </SelectContent>
+          </Select>
+          <NewInvoiceModal />
+        </div>
       </div>
       <div>
         {/* Invoice */}

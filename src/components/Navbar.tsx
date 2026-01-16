@@ -18,7 +18,7 @@ const activeLinkProps = {
 export function Navbar({ menuItems }: { menuItems: Array<MenuItem> }) {
 
 	return (
-		<div className="hidden md:block">
+		<div>
 			<div className="flex items-center justify-between py-4 px-10 bg-blue text-white">
 				<div>
 					<Link to="/">

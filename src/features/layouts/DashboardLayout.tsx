@@ -25,7 +25,7 @@ export const DashboardLayout = () => {
       <header className="fixed top-0 z-40 w-full h-20 bg-blue md:px-12">
         <Navbar menuItems={menuItems} />
       </header>
-      <main className="mt-20 px-4 pt-4 md:px-12 min-h-[calc(100vh-theme(spacing.32))]">
+      <main className="mt-20 px-4 pt-4 md:px-12 min-h-[calc(100vh-theme(spacing.32))] max-w-7xl mx-auto">
         <Outlet />
       </main>
     </div>
