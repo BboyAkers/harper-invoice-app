@@ -22,7 +22,7 @@ export function InvoicesIndex() {
         <div className="flex justify-between">
           <div>
             <h1 className="text-4xl font-bold">Invoices</h1>
-            <p className="text-grey-100">There are {invoices} invoices</p>
+            <p className="text-grey-100">There are {invoices.length} invoices</p>
           </div>
           <div className="flex flex-col md:flex-row gap-2 items-center">
             <Select>

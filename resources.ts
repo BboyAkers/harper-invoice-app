@@ -70,26 +70,26 @@ export class InvoicesListResource extends Resource {
   async get() {
     const context = this.getContext();
     // logger.notify('Invoice retrieval attempt', context);
+    const query = {
+      select: [
+        'username',
+        'id',
+        'userId',
+        'dueDate',
+        'sentDate',
+        'status',
+        'subtotal',
+        'tax',
+        'total'
+      ],
+      conditions: [
+        { attribute: 'username', comparator: 'equals', value: context.user.username },
+        // { attribute: 'userId', comparator: 'equals', value: context.user.id },
+      ],
+      limit: 300,
+    };
     try {
-      const invoices = await tables.Invoice.search(
-        JSON.stringify({
-          select: [
-            'username',
-            'id',
-            'userId',
-            'dueDate',
-            'sentDate',
-            'status',
-            'subtotal',
-            'tax',
-            'total'
-          ],
-          conditions: [
-            { attribute: 'username', comparator: 'equals', value: context.user.username },
-            // { attribute: 'userId', comparator: 'equals', value: context.user.id },
-          ],
-          limit: 300,
-        }));
+      const invoices = await tables.Invoice.search(query as any);
       return invoices;
     } catch (error) {
       logger.error('Invoice list retrieval failed', error);
