@@ -10,6 +10,8 @@ type User @table @export {
 type Invoice @table @export {
   id: ID @primaryKey
   userId: ID @indexed
+  username: String
+  user: User @relationship(from: username)
   dueDate: String
   sentDate: String
   status: String

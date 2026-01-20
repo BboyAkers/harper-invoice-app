@@ -1,4 +1,4 @@
-import { Resource, tables, server, logger, } from 'harperdb';
+import { Resource, tables, server, logger } from 'harperdb';
 
 interface UserData {
   username: string;
@@ -8,13 +8,13 @@ interface UserData {
 export class SignIn extends Resource {
   static loadAsInstance = false; // enable the updated API
 
-  async post(target:string, data: UserData) {
+  async post(target: string, data: UserData) {
     logger.notify('User login attempt', data);
     const context = this.getContext();
 
     try {
       await context.login(data.username, data.password);
-      logger.notify('User logged in successfully', data.username);
+      logger.notify('User logged in successfully', context.user.username);
     }
     catch (error) {
       logger.error('Login failed', error);
@@ -26,7 +26,7 @@ export class SignIn extends Resource {
 export class SignUp extends Resource {
   static loadAsInstance = false; // enable the updated API
 
-  async post(target:string, data: UserData) {
+  async post(target, data: UserData) {
     logger.notify('User sign-up attempt', data.username);
     const context = this.getContext();
 
@@ -39,23 +39,100 @@ export class SignUp extends Resource {
   }
 }
 
+export class UserResource extends Resource {
+  static loadAsInstance = false; // enable the updated API
+
+  async get(target) {
+    const context = this.getContext();
+    logger.notify('User retrieval attempt', target.id);
+    if (!context.user || target.id !== context.user.username) {
+      throw new Error('User not found');
+    }
+    try {
+      const user = await tables.User.get(
+        JSON.stringify({
+          conditions: [
+            { attribute: 'username', comparator: 'equals', value: context.user.username },
+          ],
+          limit: 300,
+        }));
+      return user;
+    } catch (error) {
+      logger.error('User retrieval failed', error);
+      throw new Error('User retrieval failed');
+    }
+  }
+}
+
+export class InvoicesListResource extends Resource {
+  static loadAsInstance = false; // enable the updated API
+
+  async get() {
+    const context = this.getContext();
+    // logger.notify('Invoice retrieval attempt', context);
+    try {
+      const invoices = await tables.Invoice.search(
+        JSON.stringify({
+          select: [
+            'username',
+            'id',
+            'userId',
+            'dueDate',
+            'sentDate',
+            'status',
+            'subtotal',
+            'tax',
+            'total'
+          ],
+          conditions: [
+            { attribute: 'username', comparator: 'equals', value: context.user.username },
+            // { attribute: 'userId', comparator: 'equals', value: context.user.id },
+          ],
+          limit: 300,
+        }));
+      return invoices;
+    } catch (error) {
+      logger.error('Invoice list retrieval failed', error);
+      throw new Error('Invoice list retrieval failed');
+    }
+  }
+}
+
 export class InvoiceResource extends Resource {
   static loadAsInstance = false; // enable the updated API
 
-  async get(target:string) {
-    logger.notify('Invoice retrieval attempt', target);
+  async get(target) {
     const context = this.getContext();
-
+    // logger.notify('Invoice retrieval attempt', context.user.username);
+    logger.notify('Invoice retrieval attempt', target.id);
     try {
-      const invoice = await tables.Invoice.get(target);
-      return invoice;
+      const invoiceDetails = await tables.Invoice.get(
+        JSON.stringify({
+          // select: [
+          //   'id',
+          //   'userId',
+          //   'dueDate',
+          //   'sentDate',
+          //   'status',
+          //   'subtotal',
+          //   'tax',
+          //   'total'
+          // ],
+          conditions: [
+            { attribute: 'id', comparator: 'equals', value: target.id },
+            // { attribute: 'username', comparator: 'equals', value: context.user.username },
+          ],
+          limit: 300,
+        }));
+      logger.notify('Invoice details retrieval successful', invoiceDetails);
+      return invoiceDetails;
     } catch (error) {
-      logger.error('Invoice retrieval failed', error);
-      throw new Error('Invoice retrieval failed');
+      logger.error('Invoice details retrieval failed', error);
+      throw new Error('Invoice details retrieval failed');
     }
   }
 
-  async post(target:string, data: Object) {
+  async post(target: string, data: Object) {
     logger.notify('Invoice creation attempt', data);
     const context = this.getContext();
 
@@ -67,7 +144,7 @@ export class InvoiceResource extends Resource {
     }
   }
 
-  async put(target:string, data: Object) {
+  async put(target: string, data: Object) {
     logger.notify('Invoice update attempt', data);
     const context = this.getContext();
 
@@ -128,20 +205,20 @@ async function createUser(userId: string, userData: { username: string; password
 
 // Invoice Helper functions
 async function createInvoice(invoiceData: Object, context: any) {
-  const { id, ...invoice } = invoiceData;
+  const { ...invoice } = invoiceData;
 
-  logger.debug('Creating new invoice', { id });
+  logger.debug('Creating new invoice', { invoice });
 
   // Create invoice record
   const invoiceResponse = await tables.Invoice.create(
     {
-      id: id,
+      username: context.user.username,
       ...invoice,
     },
     context
   );
 
-  logger.debug('Successfully created new invoice', { id });
+  logger.debug('Successfully created new invoice', { invoiceResponse });
 
   return invoiceResponse;
 }

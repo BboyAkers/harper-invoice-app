@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input";
 import { useFieldArray, useForm } from "react-hook-form";
 import { InvoiceItemsFormInputs } from "@/components/InvoiceItemsFormInputs";
 import { PlusCircleIcon, PlusIcon } from "lucide-react";
+import { useSubmitNewInvoiceMutation } from "@/features/invoices/hooks/mutations/useSubmitNewInvoice";
 
 export function NewInvoiceModal() {
   const form = useForm();
 
-  // const { mutate: editInvoiceDetails, isPending: isEditInvoi ceDetailsPending } = useEditInvoiceDetailsMutation();
+  const { mutate: submitNewInvoice, isPending: isSubmitNewInvoicePending } = useSubmitNewInvoiceMutation();
 
   const InvoiceItemsFieldArray = useFieldArray({
     control: form.control,
@@ -25,18 +26,15 @@ export function NewInvoiceModal() {
     });
   };
 
-  const onNewInvoiceFormSubmit = (formData) => {
+  const onNewInvoiceFormSubmit = (formData: unknown) => {
     if (formData) {
-      // editInvoiceDetails({
-      //   ...formData
-      // },
-      //   {
-      //     onSuccess: () => {
-      //       form.reset();
-      //       // console.log('User signed up successfully');
-      //     }
-      //   }
-      // );
+      console.log(formData);
+      submitNewInvoice({ ...formData }, {
+        onSuccess: () => {
+          // form.reset();
+          console.log('Invoice submitted successfully');
+        }
+      });
     }
   };
   return (
@@ -54,7 +52,7 @@ export function NewInvoiceModal() {
         <div>
           <h2 className="font-semibold text-purple mb-2">Bill To:</h2>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onNewInvoiceFormSubmit)} className="space-y-6">
+            <form className="space-y-6">
               <FormField
                 control={form.control}
                 name="streetAddress"
@@ -109,15 +107,7 @@ export function NewInvoiceModal() {
                   )}
                 />
               </div>
-            </form>
-          </Form>
-        </div>
-        <hr />
-        <div>
-          <h2 className="font-semibold text-purple mb-2">Bill To:</h2>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onNewInvoiceFormSubmit)} className="space-y-6">
-
+              <hr />
               <FormField
                 control={form.control}
                 name="clientsName"
@@ -201,14 +191,7 @@ export function NewInvoiceModal() {
                   )}
                 />
               </div>
-            </form>
-          </Form>
-        </div>
-        <div>
-          <h2 className="font-semibold text-purple mb-2">Invoice Details:</h2>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onNewInvoiceFormSubmit)} className="space-y-6">
-
+              <hr />
               <FormField
                 control={form.control}
                 name="invoiceDate"
@@ -280,7 +263,7 @@ export function NewInvoiceModal() {
             <Button variant="outline">Cancel</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button>Save Changes</Button>
+            <Button type="submit" onClick={form.handleSubmit(onNewInvoiceFormSubmit)} disabled={isSubmitNewInvoicePending}>Submit Invoice</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
