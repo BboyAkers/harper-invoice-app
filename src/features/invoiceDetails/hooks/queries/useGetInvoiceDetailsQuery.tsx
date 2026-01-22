@@ -1,8 +1,10 @@
+import type { Invoice } from '@/lib/types';
 import { queryOptions } from '@tanstack/react-query';
 
-async function getInvoiceDetails(invoiceId: string) {
+async function getInvoiceDetails(invoiceId: string): Promise<Invoice> {
   const response = await fetch(`/InvoiceResource/${invoiceId}`);
-  return response;
+  const data = await response.json();
+  return data[0];
 }
 
 export function useGetInvoiceDetailsQuery(invoiceId: string) {

@@ -4,29 +4,38 @@ import { EditInvoiceDetailsModal } from "@/features/invoiceDetails/modals/EditIn
 import { useGetInvoiceDetailsQuery } from "@/features/invoiceDetails/hooks/queries/useGetInvoiceDetailsQuery";
 import { Suspense } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useParams } from "@tanstack/react-router";
+import { Badge } from "@/components/ui/badge";
+import { statusColor } from "@/lib/statusColor";
 
 export function InvoiceDetails() {
 
-  const { data: invoiceDetails } = useSuspenseQuery(useGetInvoiceDetailsQuery("9a1dfdc4-6b13-4650-b055-cc0d0a5458dd"));
+  const { invoiceId } = useParams({ strict: false });
+  const { data: invoiceDetails } = useSuspenseQuery(useGetInvoiceDetailsQuery(invoiceId));
+
+  const handleDelete = () => {
+    console.log('Delete');
+
+  }
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <section className="flex flex-col md:flex-row bg-white shadow-lg rounded-md min-h-20 justify-between p-6 gap-6 mb-10">
         <div className="flex flex-col md:flex-row gap-2 md:gap-10 items-center">
-          <span>Status</span>
-          <span className="text-green px-6 py-2 font-medium bg-green/20 rounded-md w-full text-center">Paid</span>
+          <span className="font-semibold">Status</span>
+          <Badge variant={statusColor(invoiceDetails?.status as 'Paid' | 'Pending' | 'Overdue')}>{invoiceDetails?.status}</Badge>
         </div>
         <div className="flex gap-2">
           <EditInvoiceDetailsModal />
-          <Button size="lg" variant="destructive" className="font-semibold rounded-full h-12">Delete</Button>
+          <Button size="lg" variant="destructive" className="font-semibold rounded-full h-12" onClick={handleDelete}>Delete</Button>
           <Button size="lg" className="font-semibold rounded-full h-12">Mark as Paid</Button>
         </div>
       </section>
       <section className="bg-white shadow-lg rounded-md min-h-20 justify-between p-10">
         <div className="flex justify-between">
           <div>
-            <p className="font-semibold"><span className="text-grey-100">#</span>{invoiceDetails?.id}</p>
-            <p className="text-grey-100">Graphic Design</p>
+            <p className="font-semibold"><span className="text-grey-100">#</span>{invoiceDetails?.id.slice(0, 8).toUpperCase()}</p>
+            <p className="text-grey-100">{invoiceDetails?.clientName}</p>
           </div>
           <div className="text-right text-grey-100">
             <p>123 Harper Ave.</p>
@@ -47,12 +56,12 @@ export function InvoiceDetails() {
           </div>
           <div>
             <p className="text-grey-100 pb-4">Bill To</p>
-            <p className="font-semibold"> {invoiceDetails?.billTo}</p>
-            <p className="text-grey-100">456 Fabric Rd. <br />Denver, CO <br />80014</p>
+            <p className="font-semibold"> {invoiceDetails?.clientName}</p>
+            <p className="text-grey-100">{invoiceDetails?.clientAddressLine1}<br />{invoiceDetails?.clientCity}, {invoiceDetails?.clientState} <br />{invoiceDetails?.clientZipCode}</p>
           </div>
           <div>
             <p className="text-grey-100 pb-4">Sent to</p>
-            <p className="font-semibold">{invoiceDetails?.sentTo}</p>
+            <p className="font-semibold">{invoiceDetails?.username}</p>
           </div>
         </div>
         <div className="bg-white-100 p-6">

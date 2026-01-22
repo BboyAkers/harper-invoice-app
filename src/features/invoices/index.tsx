@@ -4,15 +4,8 @@ import { useGetInvoicesQuery } from "@/features/invoices/hooks/queries/useGetInv
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
 import InvoiceArticle from "@/features/invoices/components/InvoiceArticle";
+import type { Invoice } from "@/lib/types";
 
-type InvoiceArticleProps = {
-  id: string;
-  invoiceNumber: string;
-  dueDate: string;
-  clientsName: string;
-  invoiceAmount: string;
-  invoiceStatus: string;
-}
 
 export function InvoicesIndex() {
   const { data: invoices } = useSuspenseQuery(useGetInvoicesQuery('austin'));
@@ -40,14 +33,26 @@ export function InvoicesIndex() {
           </div>
         </div>
         <div>
-          <InvoiceArticle
+          {invoices.map((invoice: Invoice) => (
+            <div key={invoice.id} className="mb-4">
+              <InvoiceArticle
+                key={invoice.id}
+                id={invoice.id}
+                dueDate={invoice.dueDate}
+                clientName={invoice.clientName}
+                total={invoice.total}
+                status={invoice.status}
+              />
+            </div>
+          ))}
+          {/* <InvoiceArticle
             id="RT3080"
             invoiceNumber="RT3080"
             dueDate="19 Aug 2026"
             clientsName="Jensen Huang"
             invoiceAmount="$2,000.43"
             invoiceStatus="Paid"
-          />
+          /> */}
         </div>
       </Suspense>
     </div>

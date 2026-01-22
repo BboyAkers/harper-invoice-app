@@ -44,18 +44,18 @@ export class UserResource extends Resource {
 
   async get(target) {
     const context = this.getContext();
+
+    const query = {
+      conditions: [
+        { attribute: 'username', comparator: 'equals', value: context.user.username },
+      ],
+    }
     logger.notify('User retrieval attempt', target.id);
     if (!context.user || target.id !== context.user.username) {
       throw new Error('User not found');
     }
     try {
-      const user = await tables.User.get(
-        JSON.stringify({
-          conditions: [
-            { attribute: 'username', comparator: 'equals', value: context.user.username },
-          ],
-          limit: 300,
-        }));
+      const user = await tables.User.get(query);
       return user;
     } catch (error) {
       logger.error('User retrieval failed', error);
@@ -69,17 +69,12 @@ export class InvoicesListResource extends Resource {
 
   async get() {
     const context = this.getContext();
-    // logger.notify('Invoice retrieval attempt', context);
     const query = {
       select: [
         'username',
         'id',
-        'userId',
         'dueDate',
-        'sentDate',
         'status',
-        'subtotal',
-        'tax',
         'total'
       ],
       conditions: [
@@ -102,28 +97,13 @@ export class InvoiceResource extends Resource {
   static loadAsInstance = false; // enable the updated API
 
   async get(target) {
-    const context = this.getContext();
-    // logger.notify('Invoice retrieval attempt', context.user.username);
-    logger.notify('Invoice retrieval attempt', target.id);
+    // const context = this.getContext();
     try {
-      const invoiceDetails = await tables.Invoice.get(
-        JSON.stringify({
-          // select: [
-          //   'id',
-          //   'userId',
-          //   'dueDate',
-          //   'sentDate',
-          //   'status',
-          //   'subtotal',
-          //   'tax',
-          //   'total'
-          // ],
-          conditions: [
-            { attribute: 'id', comparator: 'equals', value: target.id },
-            // { attribute: 'username', comparator: 'equals', value: context.user.username },
-          ],
-          limit: 300,
-        }));
+      const invoiceDetails = await tables.Invoice.get({
+        conditions: [
+          { attribute: 'id', comparator: 'equals', value: target.id },
+        ],
+      });
       logger.notify('Invoice details retrieval successful', invoiceDetails);
       return invoiceDetails;
     } catch (error) {

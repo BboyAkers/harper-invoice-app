@@ -6,6 +6,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { InvoiceItemsFormInputs } from "@/components/InvoiceItemsFormInputs";
 import { PlusCircleIcon, PlusIcon } from "lucide-react";
 import { useSubmitNewInvoiceMutation } from "@/features/invoices/hooks/mutations/useSubmitNewInvoice";
+import ClientBillingInfoForm from "@/components/ClientBillingInfoForm";
 
 export function NewInvoiceModal() {
   const form = useForm();
@@ -50,7 +51,7 @@ export function NewInvoiceModal() {
           </DialogDescription>
         </DialogHeader>
         <div>
-          <h2 className="font-semibold text-purple mb-2">Bill To:</h2>
+          <h2 className="font-semibold text-purple mb-2">Bill From:</h2>
           <Form {...form}>
             <form className="space-y-6">
               <FormField
@@ -60,7 +61,7 @@ export function NewInvoiceModal() {
                   <FormItem>
                     <FormLabel>Street Address</FormLabel>
                     <FormControl>
-                      <Input placeholder="123 Main St" {...field} className="text-black bg-white" />
+                      <Input placeholder="123 Main St" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -108,90 +109,10 @@ export function NewInvoiceModal() {
                 />
               </div>
               <hr />
-              <FormField
-                control={form.control}
-                name="clientsName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Clients Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Clients Name" {...field} className="text-black bg-white" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="clientsEmail"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Client's Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Clients Email" {...field} className="text-black bg-white" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-
-              <FormField
-                control={form.control}
-                name="streetAddress"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Street Address</FormLabel>
-                    <FormControl>
-                      <Input placeholder="123 Main St" {...field} className="text-black bg-white" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex gap-4">
-                <FormField
-                  control={form.control}
-                  name="city"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>City</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Denver" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="state"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>State</FormLabel>
-                      <FormControl>
-                        <Input placeholder="CO" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="zip"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Zip</FormLabel>
-                      <FormControl>
-                        <Input placeholder="80211" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <h2 className="font-semibold text-purple mb-2">Bill To:</h2>
+              <ClientBillingInfoForm />
               <hr />
+              <h2 className="font-semibold text-purple mb-2">Invoice Details:</h2>
               <FormField
                 control={form.control}
                 name="invoiceDate"
@@ -199,7 +120,7 @@ export function NewInvoiceModal() {
                   <FormItem>
                     <FormLabel>Invoice Date</FormLabel>
                     <FormControl>
-                      <Input placeholder="Invoice Date" {...field} className="text-black bg-white" />
+                      <Input placeholder="Invoice Date" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -213,13 +134,12 @@ export function NewInvoiceModal() {
                   <FormItem>
                     <FormLabel>Due Date</FormLabel>
                     <FormControl>
-                      <Input placeholder="Due Date" {...field} className="text-black bg-white" />
+                      <Input placeholder="Due Date" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
 
               <FormField
                 control={form.control}
@@ -228,12 +148,13 @@ export function NewInvoiceModal() {
                   <FormItem>
                     <FormLabel>Project Description</FormLabel>
                     <FormControl>
-                      <Input placeholder="Project Description" {...field} className="text-black bg-white" />
+                      <Input placeholder="Project Description" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               {InvoiceItemsFieldArray.fields.map((field, index) => (
                 <InvoiceItemsFormInputs
                   control={form.control}

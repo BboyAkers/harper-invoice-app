@@ -11,6 +11,8 @@ type Invoice @table @export {
   id: ID @primaryKey
   userId: ID @indexed
   username: String
+  clientId: ID @indexed
+  client: BillingInfo @relationship(from: clientId)
   user: User @relationship(from: username)
   dueDate: String
   sentDate: String
@@ -35,14 +37,15 @@ type InvoiceItem @table @export {
 type BillingInfo @table @export {
   id: ID @primaryKey
   userId: ID @indexed
-  companyName: String
-  addressLine1: String
-  addressLine2: String
-  city: String
-  state: String
-  zipCode: String
-  country: String
-  phoneNumber: String
-  email: String
+  clientCompanyName: String
+  clientName: String
+  clientEmail: String
+  clientPhoneNumber: String
+  clientAddressLine1: String
+  clientAddressLine2: String
+  clientCity: String
+  clientState: String
+  clientZipCode: String
+  clientCountry: String
   user: [User] @relationship(from: userId)
 }
