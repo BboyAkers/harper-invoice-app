@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -7,17 +8,36 @@ import { InvoiceItemsFormInputs } from "@/components/InvoiceItemsFormInputs";
 import { PlusCircleIcon, PlusIcon } from "lucide-react";
 import { useSubmitNewInvoiceMutation } from "@/features/invoices/hooks/mutations/useSubmitNewInvoice";
 import ClientBillingInfoForm from "@/components/ClientBillingInfoForm";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useGetClientsQuery } from "@/features/invoices/hooks/queries/useGetClientsQuery";
+import { useSubmitClientBillingInfoMutation } from "@/features/invoiceDetails/hooks/mutations/useSubmitClientBillingInfoMutation";
 
-export function NewInvoiceModal() {
+export function NewInvoiceModal({ username }: { username: string }) {
   const form = useForm();
 
   const { mutate: submitNewInvoice, isPending: isSubmitNewInvoicePending } = useSubmitNewInvoiceMutation();
+  const { data: clients } = useGetClientsQuery(username);
+  const [isClientBillingFormShowing, setIsClientBillingFormShowing] = useState(false);
+  const { mutate: addClientBillingInfo, isPending: isAddClientBillingInfoPending } = useSubmitClientBillingInfoMutation();
 
   const InvoiceItemsFieldArray = useFieldArray({
     control: form.control,
     name: 'invoiceItems',
   });
 
+  const handleSubmitClientBillingInfo = (clientBillingInfoData: unknown) => {
+    console.log('Client billing info submitted');
+    addClientBillingInfo(clientBillingInfoData, {
+      onSuccess: () => {
+        console.log('Client billing info added successfully');
+      }
+    });
+  };
+
+
+  const handleClientBillingToggle = () => {
+    setIsClientBillingFormShowing(!isClientBillingFormShowing);
+  };
   const onAddInvoiceItemClick = () => {
     InvoiceItemsFieldArray.append({
       name: '',
@@ -51,6 +71,27 @@ export function NewInvoiceModal() {
           </DialogDescription>
         </DialogHeader>
         <div>
+          <h2 className="font-semibold text-purple mb-2">Bill To:</h2>
+          <div className="flex gap-2">
+            <Select>
+              <SelectTrigger className="w-[200px]" disabled={isClientBillingFormShowing}>
+                <SelectValue placeholder="Select a client" />
+              </SelectTrigger>
+              <SelectContent>
+                {clients?.map((client) => (
+                  <SelectItem key={client.id} value={client.id}>
+                    {client.clientCompanyName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button size="sm" className="ml-2" type="button" onClick={handleClientBillingToggle}> Add a Client</Button>
+          </div>
+          {isClientBillingFormShowing ? (
+            <ClientBillingInfoForm onFormSubmit={handleSubmitClientBillingInfo} toggleForm={handleClientBillingToggle} />
+          ) : ''}
+
+          <hr className="my-4" />
           <h2 className="font-semibold text-purple mb-2">Bill From:</h2>
           <Form {...form}>
             <form className="space-y-6">
@@ -108,9 +149,7 @@ export function NewInvoiceModal() {
                   )}
                 />
               </div>
-              <hr />
-              <h2 className="font-semibold text-purple mb-2">Bill To:</h2>
-              <ClientBillingInfoForm />
+
               <hr />
               <h2 className="font-semibold text-purple mb-2">Invoice Details:</h2>
               <FormField

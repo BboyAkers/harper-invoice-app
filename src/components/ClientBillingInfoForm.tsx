@@ -1,12 +1,33 @@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import type { BillingInfo } from "@/lib/types";
+
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-function ClientBillingInfoForm() {
-  const form = useForm<BillingInfo>({
+const formSchema = z.object({
+  clientCompanyName: z.string().min(1, "Company name is required"),
+  clientName: z.string().min(2, {
+    message: "Client name must be at least 2 characters long",
+  }),
+  clientEmail: z.email("Email is required"),
+  clientAddressLine1: z.string().min(1, "Address is required"),
+  clientAddressLine2: z.string().optional(),
+  clientCity: z.string().min(1, "City is required"),
+  clientState: z.string().min(1, "State is required"),
+  clientZipCode: z.string().min(1, "Zip code is required"),
+  clientCountry: z.string().min(1, "Country is required"),
+});
+
+type FormValues = z.infer<typeof formSchema>;
+
+function ClientBillingInfoForm({ onFormSubmit, toggleForm }: { onFormSubmit: (clientBillingInfoData: unknown) => void, toggleForm: () => void }) {
+
+  const form = useForm<FormValues>({
+    // resolver: zodResolver(formSchema),
     defaultValues: {
+      clientCompanyName: "",
       clientName: "",
       clientEmail: "",
       clientAddressLine1: "",
@@ -18,13 +39,27 @@ function ClientBillingInfoForm() {
     },
   });
 
-  const onSubmit = (data: BillingInfo) => {
-    console.log(data);
+  const onSubmit = (data: FormValues) => {
+    // console.log(data);
+    onFormSubmit(data);
   };
   return (
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="clientCompanyName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Company Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Company Name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="clientName"
@@ -122,7 +157,10 @@ function ClientBillingInfoForm() {
               )}
             />
           </div>
-          <Button type="submit">Save</Button>
+          <div className="flex gap-4 justify-end">
+            <Button variant="outline" type="button" onClick={() => toggleForm()}>Cancel</Button>
+            <Button type="submit">Save</Button>
+          </div>
         </form>
       </Form>
     </div>

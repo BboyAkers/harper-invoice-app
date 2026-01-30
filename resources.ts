@@ -5,7 +5,13 @@ interface UserData {
   password: string;
 }
 
-export class SignIn extends Resource {
+const BillingInfoTable = tables.BillingInfo;
+const InvoiceTable = tables.Invoice;
+const InvoiceItemTable = tables.InvoiceItem;
+const UserTable = tables.User;
+
+
+export class SignIn extends UserTable {
   static loadAsInstance = false; // enable the updated API
 
   async post(target: string, data: UserData) {
@@ -23,7 +29,7 @@ export class SignIn extends Resource {
   }
 }
 
-export class SignUp extends Resource {
+export class SignUp extends UserTable {
   static loadAsInstance = false; // enable the updated API
 
   async post(target, data: UserData) {
@@ -39,7 +45,7 @@ export class SignUp extends Resource {
   }
 }
 
-export class UserResource extends Resource {
+export class UserResource extends UserTable {
   static loadAsInstance = false; // enable the updated API
 
   async get(target) {
@@ -64,7 +70,7 @@ export class UserResource extends Resource {
   }
 }
 
-export class InvoicesListResource extends Resource {
+export class ClientsListResource extends BillingInfoTable {
   static loadAsInstance = false; // enable the updated API
 
   async get() {
@@ -73,6 +79,43 @@ export class InvoicesListResource extends Resource {
       select: [
         'username',
         'id',
+        'clientName',
+      ],
+      conditions: [
+        { attribute: 'username', comparator: 'equals', value: context.user.username },
+      ],
+    };
+    try {
+      const clients = await tables.BillingInfo.search(query as any);
+      return clients;
+    } catch (error) {
+      logger.error('Client list retrieval failed', error);
+      throw new Error('Client list retrieval failed');
+    }
+  }
+
+  async post(target: string, data: Object) {
+    logger.notify('Client billing info creation attempt', data);
+    const context = this.getContext();
+
+    try {
+      await createClientBillingInfo(data, context);
+    } catch (error) {
+      logger.error('Client billing info creation failed', error);
+      throw new Error('Client billing info creation failed');
+    }
+  }
+}
+export class InvoicesListResource extends InvoiceTable {
+  static loadAsInstance = false; // enable the updated API
+
+  async get() {
+    const context = this.getContext();
+    const query = {
+      select: [
+        'username',
+        'id',
+        'clientName',
         'dueDate',
         'status',
         'total'
@@ -93,13 +136,13 @@ export class InvoicesListResource extends Resource {
   }
 }
 
-export class InvoiceResource extends Resource {
+export class InvoiceResource extends InvoiceTable {
   static loadAsInstance = false; // enable the updated API
 
   async get(target) {
     // const context = this.getContext();
     try {
-      const invoiceDetails = await tables.Invoice.get({
+      const invoiceDetails = await InvoiceTable.get({
         conditions: [
           { attribute: 'id', comparator: 'equals', value: target.id },
         ],
@@ -129,7 +172,7 @@ export class InvoiceResource extends Resource {
     const context = this.getContext();
 
     try {
-      await tables.Invoice.update(target, data);
+      await InvoiceTable.update(target, data);
     } catch (error) {
       logger.error('Invoice update failed', error);
       throw new Error('Invoice update failed');
@@ -141,7 +184,7 @@ export class InvoiceResource extends Resource {
     const context = this.getContext();
 
     try {
-      await tables.Invoice.delete(target);
+      await InvoiceTable.delete(target);
     } catch (error) {
       logger.error('Invoice deletion failed', error);
       throw new Error('Invoice deletion failed');
@@ -182,6 +225,24 @@ async function createUser(userId: string, userData: { username: string; password
   return user;
 }
 
+async function createClientBillingInfo(clientBillingInfoData: Object, context: any) {
+  const { ...clientBillingInfo } = clientBillingInfoData;
+
+  logger.debug('Creating new client billing info', { clientBillingInfo });
+
+  // Create client billing info record
+  const clientBillingInfoResponse = await tables.BillingInfo.create(
+    {
+      username: context.user.username,
+      ...clientBillingInfo,
+    },
+    context
+  );
+
+  logger.debug('Successfully created new client billing info', { clientBillingInfoResponse });
+
+  return clientBillingInfoResponse;
+}
 
 // Invoice Helper functions
 async function createInvoice(invoiceData: Object, context: any) {

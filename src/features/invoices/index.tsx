@@ -29,7 +29,7 @@ export function InvoicesIndex() {
                 <SelectItem value="overdue">Overdue</SelectItem>
               </SelectContent>
             </Select>
-            <NewInvoiceModal />
+            <NewInvoiceModal username={invoices[0].username} />
           </div>
         </div>
         <div>
