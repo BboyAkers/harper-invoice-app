@@ -1,4 +1,4 @@
-import { Resource, tables, server, logger } from 'harperdb';
+import { tables, server, logger } from 'harperdb';
 
 interface UserData {
   username: string;

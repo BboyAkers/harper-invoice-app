@@ -33,7 +33,7 @@ export function InvoicesIndex() {
           </div>
         </div>
         <div>
-          {invoices.map((invoice: Invoice) => (
+          {invoices?.map((invoice: Invoice) => (
             <div key={invoice.id} className="mb-4">
               <InvoiceArticle
                 key={invoice.id}
