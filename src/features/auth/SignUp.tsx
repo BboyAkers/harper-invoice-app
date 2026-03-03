@@ -61,12 +61,12 @@ export function SignUp() {
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="username" {...field} className="text-black bg-white" />
+                      <Input type="email" placeholder="email" {...field} className="text-black bg-white" />
                     </FormControl>
                     <FormDescription className="text-white">
-                      This is your account name.
+                      This is your account email.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

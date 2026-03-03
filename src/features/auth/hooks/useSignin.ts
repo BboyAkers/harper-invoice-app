@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
 export interface UserCredentials {
-	username: string;
+	email: string;
 	password: string;
 }
 
@@ -20,8 +20,8 @@ export async function onSignInSubmit(signInCredentials: UserCredentials) {
     return response;
   } 
   catch (error) {
-    console.error('Error during sign up:', error);
-    throw new Error('Sign up failed');
+    console.error('Error during sign in:', error);
+    throw new Error('Sign in failed');
   }
 	
 }

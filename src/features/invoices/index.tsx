@@ -8,14 +8,14 @@ import type { Invoice } from "@/lib/types";
 
 
 export function InvoicesIndex() {
-  const { data: invoices } = useSuspenseQuery(useGetInvoicesQuery('austin'));
+  // const { data: invoices } = useSuspenseQuery(useGetInvoicesQuery('austin'));
   return (
     <div>
       <Suspense fallback={<div>Loading...</div>}>
         <div className="flex justify-between">
           <div>
             <h1 className="text-4xl font-bold">Invoices</h1>
-            <p className="text-grey-100">There are {invoices.length} invoices</p>
+            {/* <p className="text-grey-100">There are {invoices.length} invoices</p> */}
           </div>
           <div className="flex flex-col md:flex-row gap-2 items-center">
             <Select>
@@ -29,11 +29,11 @@ export function InvoicesIndex() {
                 <SelectItem value="overdue">Overdue</SelectItem>
               </SelectContent>
             </Select>
-            <NewInvoiceModal username={invoices[0].username} />
+            {/* <NewInvoiceModal username={invoices[0].username} /> */}
           </div>
         </div>
         <div>
-          {invoices?.map((invoice: Invoice) => (
+          {/* {invoices?.map((invoice: Invoice) => (
             <div key={invoice.id} className="mb-4">
               <InvoiceArticle
                 key={invoice.id}
@@ -44,15 +44,14 @@ export function InvoicesIndex() {
                 status={invoice.status}
               />
             </div>
-          ))}
-          {/* <InvoiceArticle
+          ))} */}
+          <InvoiceArticle
             id="RT3080"
-            invoiceNumber="RT3080"
             dueDate="19 Aug 2026"
-            clientsName="Jensen Huang"
-            invoiceAmount="$2,000.43"
-            invoiceStatus="Paid"
-          /> */}
+            clientName="Jensen Huang"
+            total={parseFloat("2000.43")}
+            status="Paid"
+          />
         </div>
       </Suspense>
     </div>

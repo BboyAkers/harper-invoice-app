@@ -1,6 +1,6 @@
 type User @table @export {
   id: ID @primaryKey
-  username: String @indexed
+  email: String @indexed
   password: String
   createdAt: String
   invoices: [Invoice] @relationship(to: userId)
@@ -10,10 +10,10 @@ type User @table @export {
 type Invoice @table @export {
   id: ID @primaryKey
   userId: ID @indexed
-  username: String
+  email: String
   clientId: ID @indexed
   client: BillingInfo @relationship(from: clientId)
-  user: User @relationship(from: username)
+  user: User @relationship(from: email)
   dueDate: String
   sentDate: String
   status: String

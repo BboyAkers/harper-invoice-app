@@ -1,7 +1,7 @@
 import { tables, server, logger } from 'harperdb';
 
 interface UserData {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -19,7 +19,7 @@ export class SignIn extends UserTable {
     const context = this.getContext();
 
     try {
-      await context.login(data.username, data.password);
+      await context.login(data.email, data.password);
       logger.notify('User logged in successfully', context.user.username);
     }
     catch (error) {
@@ -33,7 +33,7 @@ export class SignUp extends UserTable {
   static loadAsInstance = false; // enable the updated API
 
   async post(target, data: UserData) {
-    logger.notify('User sign-up attempt', data.username);
+    logger.notify('User sign-up attempt', data.email);
     const context = this.getContext();
 
     try {
@@ -53,7 +53,7 @@ export class UserResource extends UserTable {
 
     const query = {
       conditions: [
-        { attribute: 'username', comparator: 'equals', value: context.user.username },
+        { attribute: 'email', comparator: 'equals', value: context.user.username },
       ],
     }
     logger.notify('User retrieval attempt', target.id);
@@ -113,7 +113,7 @@ export class InvoicesListResource extends InvoiceTable {
     const context = this.getContext();
     const query = {
       select: [
-        'username',
+        'email',
         'id',
         'clientName',
         'dueDate',
@@ -121,7 +121,7 @@ export class InvoicesListResource extends InvoiceTable {
         'total'
       ],
       conditions: [
-        { attribute: 'username', comparator: 'equals', value: context.user.username },
+        { attribute: 'email', comparator: 'equals', value: context.user.username },
         // { attribute: 'userId', comparator: 'equals', value: context.user.id },
       ],
       limit: 300,

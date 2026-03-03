@@ -43,15 +43,15 @@ export function SignIn() {
             <div>
               <FormField
                 control={form.control}
-                name="username"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="username" {...field} className="text-black bg-white" />
+                      <Input type="email" placeholder="email" {...field} className="text-black bg-white" />
                     </FormControl>
                     <FormDescription className="text-white">
-                      This is your public display name.
+                      This is your account email.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
